@@ -125,26 +125,27 @@ export default function StorefrontHome() {
         {sections.show_categories !== false && categories && categories.length > 0 && (
           <section className="mb-12">
             <h2 className="mb-5 text-xl font-bold text-gray-900">{t('storefrontHome.shopByCategory')}</h2>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
                   to={`/store/${slug}/category/${cat.slug}`}
-                  className="group relative flex h-40 items-end overflow-hidden rounded-2xl p-5 text-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-                  style={{
-                    backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
-                    backgroundColor: theme.primary,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
+                  className="group flex flex-col items-center gap-3 text-center transition hover:-translate-y-1"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="relative">
-                    <p className="font-bold">{cat.name}</p>
-                    <p className="text-xs text-white/80 opacity-0 transition group-hover:opacity-100">
-                      {t('storefrontHome.browseProducts')}
-                    </p>
+                  <div
+                    className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full shadow-sm transition-shadow group-hover:shadow-md sm:h-32 sm:w-32"
+                    style={{
+                      backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
+                      backgroundColor: cat.image_url ? undefined : theme.primary,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  >
+                    {!cat.image_url && (
+                      <span className="text-xl font-bold text-white sm:text-2xl">{cat.name.charAt(0)}</span>
+                    )}
                   </div>
+                  <p className="max-w-[100px] text-sm font-semibold text-gray-900 sm:max-w-[120px]">{cat.name}</p>
                 </Link>
               ))}
             </div>
