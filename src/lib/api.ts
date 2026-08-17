@@ -529,7 +529,7 @@ export async function fetchSettings(storeId: string): Promise<StoreSettings | nu
 }
 
 export async function updateSettings(storeId: string, patch: Partial<StoreSettings>) {
-  const { error } = await supabase.from('store_settings').update(patch).eq('store_id', storeId)
+  const { error } = await supabase.from('store_settings').upsert({ store_id: storeId, ...patch }, { onConflict: 'store_id' })
   if (error) throw error
 }
 

@@ -27,7 +27,7 @@ const HOMEPAGE_DEFAULTS: StoreSettings['homepage_sections'] = {
 }
 
 export default function CustomizationPage() {
-  const { currentStore, refreshSettings } = useStore()
+  const { currentStore, refreshSettings, refreshStores } = useStore()
   const { t } = useI18n()
   const storeId = currentStore?.id ?? ''
   const queryClient = useQueryClient()
@@ -138,6 +138,7 @@ export default function CustomizationPage() {
       success(t('customization.customizationSaved'), t('customization.customizationSavedMsg'))
       queryClient.invalidateQueries({ queryKey: storeKeys.settings(storeId) })
       await refreshSettings()
+      await refreshStores()
     } catch (e) {
       error(t('customization.couldNotSaveCustomization'), (e as Error).message)
     } finally {
