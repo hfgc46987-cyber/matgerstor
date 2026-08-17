@@ -31,7 +31,7 @@ export default function Sidebar() {
     { to: '/dashboard/inventory', label: 'nav.inventory', icon: Boxes },
     { to: '/dashboard/marketing', label: 'nav.marketing', icon: Megaphone },
     { to: '/dashboard/analytics', label: 'nav.analytics', icon: BarChart3 },
-    { to: '/dashboard/customization', label: 'nav.customization', icon: Palette },
+    { to: '/dashboard/customization', label: 'nav.storeCustomization', icon: Palette },
     { to: '/dashboard/settings', label: 'nav.settings', icon: Settings },
   ]
 

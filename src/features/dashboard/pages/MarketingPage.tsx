@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit2, Megaphone, Tag } from 'lucide-react'
+import { Plus, Trash2, Megaphone, Tag } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { fetchCoupons, upsertCoupon, deleteCoupon, fetchSettings, updateSettings } from '@/lib/api'
 import { Coupon, StoreSettings } from '@/lib/types'
@@ -39,7 +39,7 @@ export default function MarketingPage() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <Spinner size="lg" />
+        <Spinner className="w-8 h-8 text-primary-600" />
       </div>
     )
   }
