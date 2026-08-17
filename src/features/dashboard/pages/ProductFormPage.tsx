@@ -48,7 +48,7 @@ export default function ProductFormPage() {
   const [barcode, setBarcode] = useState('')
   const [stock, setStock] = useState('0')
   const [trackInventory, setTrackInventory] = useState(true)
-  const [status, setStatus] = useState<'active' | 'draft' | 'archived'>('draft')
+  const [status, setStatus] = useState<'active' | 'draft' | 'archived'>('active')
   const [featured, setFeatured] = useState(false)
   const [categoryId, setCategoryId] = useState('')
   const [images, setImages] = useState<ImageRow[]>([])
