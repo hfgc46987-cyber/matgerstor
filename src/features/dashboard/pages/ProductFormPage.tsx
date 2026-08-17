@@ -178,11 +178,11 @@ export default function ProductFormPage() {
 
   return (
     <form onSubmit={handleSubmit} className="mx-auto max-w-5xl space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+      <div className="sticky top-16 z-10 -mx-4 mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-gray-100 bg-white/80 px-6 py-4 shadow-sm backdrop-blur-md sm:mx-0 sm:top-4">
+        <div className="flex items-center gap-4">
           <Link
             to="/dashboard/products"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition hover:bg-gray-50"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition hover:bg-gray-50 hover:text-gray-900"
           >
             <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Link>
@@ -203,7 +203,7 @@ export default function ProductFormPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle>{t('productForm.basicInfo')}</CardTitle>
               <CardDescription>{t('productForm.basicInfoDesc')}</CardDescription>
@@ -214,6 +214,7 @@ export default function ProductFormPage() {
                 <Input
                   id="pname"
                   required
+                  autoComplete="off"
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
                   placeholder={t('productForm.productNamePlaceholder')}
@@ -223,6 +224,7 @@ export default function ProductFormPage() {
                 <Label htmlFor="pslug">{t('productForm.slug')}</Label>
                 <Input
                   id="pslug"
+                  autoComplete="off"
                   value={slug}
                   onChange={(e) => {
                     setSlugTouched(true)
@@ -256,7 +258,7 @@ export default function ProductFormPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle>{t('productForm.pricing')}</CardTitle>
               <CardDescription>{t('productForm.pricingDesc')}</CardDescription>
@@ -306,7 +308,7 @@ export default function ProductFormPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle>{t('productForm.inventory')}</CardTitle>
               <CardDescription>{t('productForm.inventoryDesc')}</CardDescription>
@@ -373,7 +375,7 @@ export default function ProductFormPage() {
         </div>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle>{t('productForm.media')}</CardTitle>
               <CardDescription>{t('productForm.mediaDesc')}</CardDescription>
@@ -456,7 +458,7 @@ export default function ProductFormPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-sm">
             <CardHeader>
               <CardTitle>{t('productForm.statusVisibility')}</CardTitle>
             </CardHeader>
