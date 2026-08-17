@@ -83,30 +83,36 @@ export default function StorefrontHome() {
       {/* Banner */}
       {sections.show_banner !== false && (
         <section
-          className="relative flex items-center justify-center px-6 py-20 text-center"
+          className="relative flex items-center justify-center px-6 py-32 text-center overflow-hidden"
           style={{
             backgroundColor: theme.primary,
-            backgroundImage: theme.bannerUrl ? `url(${theme.bannerUrl})` : undefined,
+            backgroundImage: theme.bannerUrl 
+              ? `url(${theme.bannerUrl})` 
+              : `linear-gradient(135deg, ${theme.primary}, ${theme.secondary} 150%)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          <div className="relative max-w-2xl">
-            <h1 className="text-3xl font-bold text-white sm:text-4xl">
+          {/* Subtle overlay pattern if no banner */}
+          {!theme.bannerUrl && (
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+          )}
+          <div className="relative z-10 max-w-3xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-sm">
               {sections.banner_heading || t('storefrontHome.welcomeTo', { store: store.name })}
             </h1>
             {sections.banner_subheading && (
-              <p className="mt-3 text-base text-white/85">
+              <p className="mx-auto mt-6 max-w-xl text-lg text-white/90 sm:text-xl">
                 {sections.banner_subheading}
               </p>
             )}
             {store.description && !sections.banner_subheading && (
-              <p className="mt-3 text-base text-white/85">{store.description}</p>
+              <p className="mx-auto mt-6 max-w-xl text-lg text-white/90 sm:text-xl">{store.description}</p>
             )}
             {grid.length > 0 && (
               <a
                 href="#products"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold transition hover:opacity-90"
+                className="mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold uppercase tracking-wider shadow-lg transition hover:scale-105 hover:shadow-xl"
                 style={{ color: theme.primary }}
               >
                 {t('storefrontHome.shopNow')}
@@ -127,7 +133,7 @@ export default function StorefrontHome() {
                 <Link
                   key={cat.id}
                   to={`/store/${slug}/category/${cat.slug}`}
-                  className="group relative flex h-32 items-end overflow-hidden rounded-xl p-4 text-white transition hover:shadow-lg"
+                  className="group relative flex h-40 items-end overflow-hidden rounded-2xl p-5 text-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
                   style={{
                     backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
                     backgroundColor: theme.primary,
@@ -164,10 +170,12 @@ export default function StorefrontHome() {
               ))}
             </div>
           ) : (products ?? []).length === 0 ? (
-            <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 py-16 text-center">
-              <ShoppingBag className="mx-auto h-10 w-10 text-gray-300" />
-              <p className="mt-3 text-sm font-medium text-gray-500">{t('storefrontHome.noProductsAvailable')}</p>
-              <p className="mt-1 text-xs text-gray-400">{t('storefrontHome.checkBackSoon')}</p>
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white py-24 text-center shadow-sm">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-50 mb-4">
+                <ShoppingBag className="h-8 w-8 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">{t('storefrontHome.noProductsAvailable')}</h3>
+              <p className="mt-2 max-w-sm text-sm text-gray-500">{t('storefrontHome.checkBackSoon')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
