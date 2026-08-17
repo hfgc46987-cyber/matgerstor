@@ -99,7 +99,7 @@ export const ar: typeof en = {
 
   // Auth
   'auth.welcomeBack': 'مرحباً بعودتك',
-  'auth.signInSubtitle': 'سجّل الدخول إلى حسابك في StoreCraft.',
+  'auth.signInSubtitle': 'سجّل الدخول إلى حسابك في StoreHub.',
   'auth.passwordMode': 'كلمة المرور',
   'auth.otpMode': 'رمز البريد (OTP)',
   'auth.emailAddress': 'البريد الإلكتروني',
@@ -141,7 +141,7 @@ export const ar: typeof en = {
   'auth.invalidPasswordMsg': 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.',
   'auth.signUpFailed': 'فشل إنشاء الحساب',
   'auth.accountCreated': 'تم إنشاء الحساب',
-  'auth.welcomeToStorecraft': 'مرحباً بك في StoreCraft!',
+  'auth.welcomeToStorecraft': 'مرحباً بك في StoreHub!',
   'auth.checkYourEmail': 'تفقد بريدك الإلكتروني',
   'auth.confirmationSentMsg':
     'أرسلنا رابط تأكيد إلى {email}. انقر عليه للتحقق من حسابك ثم سجّل الدخول.',
@@ -203,7 +203,7 @@ export const ar: typeof en = {
   'userMenu.createNewStore': 'إنشاء متجر جديد',
   'userMenu.storeSettings': 'إعدادات المتجر',
   'userMenu.signOut': 'تسجيل الخروج',
-  'userMenu.storecraftUser': 'مستخدم StoreCraft',
+  'userMenu.storehubUser': 'مستخدم StoreHub',
 
   // Notifications
   'notifications.title': 'الإشعارات',
@@ -493,7 +493,7 @@ export const ar: typeof en = {
   // Storefront shell
   'storefront.storeNotFound': 'المتجر غير موجود',
   'storefront.storeUnavailable': 'هذا المتجر غير موجود أو غير متاح حالياً.',
-  'storefront.goToStorecraft': 'الانتقال إلى StoreCraft',
+  'storefront.goToStorecraft': 'الانتقال إلى StoreHub',
   'storefront.searchPlaceholder': 'ابحث…',
   'storefront.searching': 'جارٍ البحث…',
   'storefront.noProductsFound': 'لا توجد منتجات',
@@ -575,12 +575,12 @@ export const ar: typeof en = {
   'orderSuccess.emailed': 'أرسلنا التفاصيل إلى بريدك الإلكتروني. سيتم إشعارك عند الشحن.',
   'orderSuccess.keepEye': 'ترقب بريدك الوارد',
   'orderSuccess.updates': 'تُرسل تحديثات الطلب إلى البريد الإلكتروني الذي أدخلته.',
-  'orderSuccess.backToStorecraft': 'العودة إلى StoreCraft',
+  'orderSuccess.backToStorecraft': 'العودة إلى StoreHub',
 
   // Onboarding
   'onboarding.title': 'أنشئ متجرك',
   'onboarding.subtitle':
-    'مرحباً بك في StoreCraft! لنهيئ متجرك الإلكتروني. يمكنك تغيير كل شيء لاحقاً.',
+    'مرحباً بك في StoreHub! لنهيئ متجرك الإلكتروني. يمكنك تغيير كل شيء لاحقاً.',
   'onboarding.storeName': 'اسم المتجر',
   'onboarding.storeNamePlaceholder': 'مثال: متجر أكمي',
   'onboarding.storeLink': 'رابط المتجر',
@@ -613,7 +613,7 @@ export const ar: typeof en = {
   'landing.heroTitle': 'أطلق متجرك الإلكتروني في {highlight}',
   'landing.minutes': 'دقائق',
   'landing.heroSubtitle':
-    'يمنح StoreCraft كل تاجر منصة تجارة إلكترونية متكاملة — منتجات وطلبات وعملاء وتحليلات ومتجراً جميلاً — كل ذلك معزول وآمن.',
+    'يمنح StoreHub كل تاجر منصة تجارة إلكترونية متكاملة — منتجات وطلبات وعملاء وتحليلات ومتجراً جميلاً — كل ذلك معزول وآمن.',
   'landing.startFree': 'ابدأ مجاناً',
   'landing.viewDashboard': 'عرض لوحة التحكم',
   'landing.freeForever': 'خطة مجانية للأبد · بدون بطاقة ائتمان',
@@ -670,7 +670,7 @@ export const ar: typeof en = {
   'landing.popular': 'الأكثر رواجاً',
   'landing.readyToStart': 'مستعد لبدء البيع؟',
   'landing.joinStorecraft':
-    'انضم إلى StoreCraft وأطلق متجرك اليوم. يستغرق الأمر أقل من دقيقتين.',
+    'انضم إلى StoreHub وأطلق متجرك اليوم. يستغرق الأمر أقل من دقيقتين.',
   'landing.createYourStore': 'أنشئ متجرك',
 
   // Admin
@@ -683,7 +683,7 @@ export const ar: typeof en = {
   'admin.platformAdministration': 'إدارة المنصة',
   'admin.signedInAs': 'تم تسجيل الدخول كـ {name}',
   'admin.overviewTitle': 'نظرة عامة على المنصة',
-  'admin.overviewSubtitle': 'مؤشرات عالية المستوى لمنصة StoreCraft بأكملها.',
+  'admin.overviewSubtitle': 'مؤشرات عالية المستوى لمنصة StoreHub بأكملها.',
   'admin.totalUsers': 'إجمالي المستخدمين',
   'admin.totalStores': 'إجمالي المتاجر',
   'admin.totalProducts': 'إجمالي المنتجات',

@@ -7,7 +7,7 @@ export type MessageKey = keyof typeof en
 
 type Messages = typeof en
 
-const STORAGE_KEY = 'storecraft-lang'
+const STORAGE_KEY = 'storehub-lang'
 
 const catalogs: Record<Lang, Messages> = { en, ar }
 

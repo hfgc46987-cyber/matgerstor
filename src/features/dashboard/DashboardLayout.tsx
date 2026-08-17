@@ -50,12 +50,12 @@ export default function DashboardLayout() {
         <footer className="border-t border-gray-200 px-6 py-4 text-center text-xs text-gray-400">
           {currentStore ? (
             <>
-              <Link to="/" className="hover:text-gray-600">StoreCraft</Link>
+              <Link to="/" className="hover:text-gray-600">StoreHub</Link>
               <span className="mx-1">·</span>
               <span>{currentStore.name}</span>
             </>
           ) : (
-            'StoreCraft'
+            'StoreHub'
           )}
         </footer>
       </div>

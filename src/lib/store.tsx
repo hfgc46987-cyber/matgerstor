@@ -33,7 +33,7 @@ interface StoreContextValue {
 
 const StoreContext = createContext<StoreContextValue | undefined>(undefined)
 
-const SELECTED_STORE_KEY = 'storecraft:selected-store'
+const SELECTED_STORE_KEY = 'storehub:selected-store'
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()

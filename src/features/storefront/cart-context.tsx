@@ -33,7 +33,7 @@ const CartContext = createContext<CartContextValue | undefined>(undefined)
 export function CartProvider({ storeSlug, children }: { storeSlug: string; children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
 
-  const storageKey = `storecraft:cart:${storeSlug}`
+  const storageKey = `storehub:cart:${storeSlug}`
 
   useEffect(() => {
     try {

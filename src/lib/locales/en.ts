@@ -53,7 +53,7 @@ export const en = {
   'storeswitcher.noStores': 'No stores found',
 
   // UserMenu
-  'usermenu.user': 'StoreCraft user',
+  'usermenu.user': 'StoreHub user',
   'usermenu.viewStorefront': 'View storefront',
   'usermenu.createStore': 'Create new store',
   'usermenu.settings': 'Store settings',

@@ -97,7 +97,7 @@ export const en = {
 
   // Auth
   'auth.welcomeBack': 'Welcome back',
-  'auth.signInSubtitle': 'Sign in to your StoreCraft account.',
+  'auth.signInSubtitle': 'Sign in to your StoreHub account.',
   'auth.passwordMode': 'Password',
   'auth.otpMode': 'Email code (OTP)',
   'auth.emailAddress': 'Email address',
@@ -139,7 +139,7 @@ export const en = {
   'auth.invalidPasswordMsg': 'Password must be at least 6 characters long.',
   'auth.signUpFailed': 'Sign up failed',
   'auth.accountCreated': 'Account created',
-  'auth.welcomeToStorecraft': 'Welcome to StoreCraft!',
+  'auth.welcomeToStorecraft': 'Welcome to StoreHub!',
   'auth.checkYourEmail': 'Check your email',
   'auth.confirmationSentMsg':
     'We sent a confirmation link to {email}. Click it to verify your account, then sign in.',
@@ -201,7 +201,7 @@ export const en = {
   'userMenu.createNewStore': 'Create new store',
   'userMenu.storeSettings': 'Store settings',
   'userMenu.signOut': 'Sign out',
-  'userMenu.storecraftUser': 'StoreCraft user',
+  'userMenu.storehubUser': 'StoreHub user',
 
   // Notifications
   'notifications.title': 'Notifications',
@@ -492,7 +492,7 @@ export const en = {
   // Storefront shell
   'storefront.storeNotFound': 'Store not found',
   'storefront.storeUnavailable': "This store doesn't exist or is currently unavailable.",
-  'storefront.goToStorecraft': 'Go to StoreCraft',
+  'storefront.goToStorecraft': 'Go to StoreHub',
   'storefront.searchPlaceholder': 'Search…',
   'storefront.searching': 'Searching…',
   'storefront.noProductsFound': 'No products found',
@@ -574,12 +574,12 @@ export const en = {
   'orderSuccess.emailed': "We've sent the details to your email. You'll be notified when it ships.",
   'orderSuccess.keepEye': 'Keep an eye on your inbox',
   'orderSuccess.updates': 'Order updates are sent to the email you provided.',
-  'orderSuccess.backToStorecraft': 'Back to StoreCraft',
+  'orderSuccess.backToStorecraft': 'Back to StoreHub',
 
   // Onboarding
   'onboarding.title': 'Create your store',
   'onboarding.subtitle':
-    "Welcome to StoreCraft! Let's set up your online store. You can change everything later.",
+    "Welcome to StoreHub! Let's set up your online store. You can change everything later.",
   'onboarding.storeName': 'Store name',
   'onboarding.storeNamePlaceholder': 'e.g. Acme Boutique',
   'onboarding.storeLink': 'Store link',
@@ -612,7 +612,7 @@ export const en = {
   'landing.heroTitle': 'Launch your online store in {highlight}',
   'landing.minutes': 'minutes',
   'landing.heroSubtitle':
-    'StoreCraft gives every merchant a complete e-commerce platform — products, orders, customers, analytics and a beautiful storefront — all isolated and secure.',
+    'StoreHub gives every merchant a complete e-commerce platform — products, orders, customers, analytics and a beautiful storefront — all isolated and secure.',
   'landing.startFree': 'Start free',
   'landing.viewDashboard': 'View dashboard',
   'landing.freeForever': 'Free forever plan · No credit card required',
@@ -669,7 +669,7 @@ export const en = {
   'landing.popular': 'Popular',
   'landing.readyToStart': 'Ready to start selling?',
   'landing.joinStorecraft':
-    'Join StoreCraft and launch your store today. It takes less than two minutes.',
+    'Join StoreHub and launch your store today. It takes less than two minutes.',
   'landing.createYourStore': 'Create your store',
 
   // Admin
@@ -682,7 +682,7 @@ export const en = {
   'admin.platformAdministration': 'Platform Administration',
   'admin.signedInAs': 'Signed in as {name}',
   'admin.overviewTitle': 'Platform overview',
-  'admin.overviewSubtitle': 'High-level metrics for the entire StoreCraft platform.',
+  'admin.overviewSubtitle': 'High-level metrics for the entire StoreHub platform.',
   'admin.totalUsers': 'Total users',
   'admin.totalStores': 'Total stores',
   'admin.totalProducts': 'Total products',

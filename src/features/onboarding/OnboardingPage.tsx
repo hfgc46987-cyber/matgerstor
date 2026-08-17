@@ -115,9 +115,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="mx-auto max-w-2xl px-6">
         <div className="flex flex-col items-center text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-600">
-            <Store className="h-6 w-6 text-white" />
-          </div>
+          <img src="/logo.png" alt="StoreHub Logo" className="h-12 w-auto object-contain" />
           <h1 className="mt-4 text-2xl font-bold text-gray-900">{t('onboarding.title')}</h1>
           <p className="mt-1 max-w-md text-sm text-gray-500">
             {t('onboarding.subtitle')}
@@ -141,7 +139,7 @@ export default function OnboardingPage() {
               <Label htmlFor="storeSlug">{t('onboarding.storeLink')}</Label>
               <div className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/30">
                 <Globe className="h-4 w-4 shrink-0 text-gray-400" />
-                <span className="shrink-0 text-sm text-gray-400">storecraft.com/store/</span>
+                <span className="shrink-0 text-sm text-gray-400">storehub.com/store/</span>
                 <input
                   id="storeSlug"
                   required
