@@ -148,7 +148,7 @@ export default function CustomizationPage() {
   if (isLoading) return <div className="flex justify-center py-24"><Spinner /></div>
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-gray-900">{t('customization.title')}</h1>
@@ -517,21 +517,24 @@ function StorefrontPreview({
       {/* Banner */}
       {preview.showBanner && (
         <div
-          className="relative flex items-center justify-center px-6 py-8 text-center"
+          className="relative flex items-center justify-center px-6 py-12 text-center overflow-hidden"
           style={{
-            backgroundImage: preview.bannerUrl ? `url(${preview.bannerUrl})` : undefined,
+            backgroundImage: preview.bannerUrl ? `url(${preview.bannerUrl})` : `linear-gradient(135deg, ${preview.primary}, ${preview.secondary} 150%)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundColor: preview.primary,
           }}
         >
-          <div className="relative">
-            <p className="text-lg font-bold text-white">{preview.bannerHeading || t('customization.welcomeToOurStore')}</p>
+          {!preview.bannerUrl && (
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }} />
+          )}
+          <div className="relative z-10">
+            <p className="text-xl font-extrabold text-white">{preview.bannerHeading || t('storefrontHome.welcomeTo', { store: storeName })}</p>
             {preview.bannerSubheading && (
-              <p className="mt-1 text-xs text-white/80">{preview.bannerSubheading}</p>
+              <p className="mt-2 text-xs text-white/90">{preview.bannerSubheading}</p>
             )}
             <button
-              className="mt-3 rounded-lg bg-white px-4 py-1.5 text-xs font-semibold"
+              className="mt-4 rounded-full bg-white px-5 py-2 text-[11px] font-bold uppercase tracking-wider shadow-md"
               style={{ color: preview.primary }}
             >
               {t('customization.shopNow')}

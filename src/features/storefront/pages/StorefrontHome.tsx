@@ -106,9 +106,6 @@ export default function StorefrontHome() {
                 {sections.banner_subheading}
               </p>
             )}
-            {store.description && !sections.banner_subheading && (
-              <p className="mx-auto mt-6 max-w-xl text-lg text-white/90 sm:text-xl">{store.description}</p>
-            )}
             {grid.length > 0 && (
               <a
                 href="#products"
