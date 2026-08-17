@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/toast'
 import { useI18n } from '@/lib/i18n'
 import { formatMoney } from '@/lib/utils'
 import { Store, StoreSettings } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 interface OutletCtx {
   store: Store
@@ -78,81 +79,95 @@ export default function StorefrontHome() {
   const featured = (products ?? []).filter((p) => p.featured)
   const grid = featured.length > 0 ? featured : (products ?? [])
 
-  return (
-    <div>
-      {/* Banner */}
-      {sections.show_banner !== false && (
-        <section
-          className="relative flex items-center justify-center px-6 py-32 text-center overflow-hidden"
-          style={{
-            backgroundColor: theme.primary,
-            backgroundImage: theme.bannerUrl 
-              ? `url(${theme.bannerUrl})` 
-              : `linear-gradient(135deg, ${theme.primary}, ${theme.secondary} 150%)`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          {/* Subtle overlay pattern if no banner */}
-          {!theme.bannerUrl && (
-            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+  const sectionOrder = theme.designConfig?.section_order ?? ['banner', 'categories', 'featured']
+
+  const renderBanner = () => {
+    if (sections.show_banner === false) return null
+    return (
+      <section
+        key="banner"
+        className="relative flex items-center justify-center px-6 py-32 text-center overflow-hidden"
+        style={{
+          backgroundColor: theme.primary,
+          backgroundImage: theme.bannerUrl 
+            ? `url(${theme.bannerUrl})` 
+            : `linear-gradient(135deg, ${theme.primary}, ${theme.secondary} 150%)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        {!theme.bannerUrl && (
+          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+        )}
+        <div className="relative z-10 max-w-3xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-sm">
+            {sections.banner_heading || t('storefrontHome.welcomeTo', { store: store.name })}
+          </h1>
+          {sections.banner_subheading && (
+            <p className="mx-auto mt-6 max-w-xl text-lg text-white/90 sm:text-xl">
+              {sections.banner_subheading}
+            </p>
           )}
-          <div className="relative z-10 max-w-3xl">
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-sm">
-              {sections.banner_heading || t('storefrontHome.welcomeTo', { store: store.name })}
-            </h1>
-            {sections.banner_subheading && (
-              <p className="mx-auto mt-6 max-w-xl text-lg text-white/90 sm:text-xl">
-                {sections.banner_subheading}
-              </p>
-            )}
-            {grid.length > 0 && (
-              <a
-                href="#products"
-                className="mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold uppercase tracking-wider shadow-lg transition hover:scale-105 hover:shadow-xl"
-                style={{ color: theme.primary }}
+          {grid.length > 0 && (
+            <a
+              href="#products"
+              className={cn(
+                "mt-10 inline-flex items-center gap-2 bg-white px-8 py-4 text-sm font-bold uppercase tracking-wider shadow-lg transition hover:scale-105 hover:shadow-xl",
+                theme.designConfig?.button_style === 'square' ? 'rounded-none' : theme.designConfig?.button_style === 'rounded' ? 'rounded-lg' : 'rounded-full'
+              )}
+              style={{ color: theme.primary }}
+            >
+              {t('storefrontHome.shopNow')}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </a>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  const renderCategories = () => {
+    if (sections.show_categories === false || !categories || categories.length === 0) return null
+    return (
+      <div key="categories" className="mx-auto max-w-6xl px-4 py-10">
+        <section className="mb-12">
+          <h2 className="mb-5 text-xl font-bold text-gray-900">{t('storefrontHome.shopByCategory')}</h2>
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                to={`/store/${slug}/category/${cat.slug}`}
+                className="group flex flex-col items-center gap-3 text-center transition hover:-translate-y-1"
               >
-                {t('storefrontHome.shopNow')}
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </a>
-            )}
+                <div
+                  className={cn(
+                    "flex h-24 w-24 items-center justify-center overflow-hidden transition-shadow group-hover:shadow-md sm:h-32 sm:w-32",
+                    theme.designConfig?.category_shape === 'square' ? 'rounded-none' : theme.designConfig?.category_shape === 'rounded' ? 'rounded-2xl' : 'rounded-full',
+                    theme.designConfig?.card_style === 'flat' ? 'border border-gray-100 shadow-none' : theme.designConfig?.card_style === 'shadow' ? 'border-none shadow-md' : 'border border-gray-200 shadow-sm'
+                  )}
+                  style={{
+                    backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
+                    backgroundColor: cat.image_url ? undefined : theme.primary,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  {!cat.image_url && (
+                    <span className="text-xl font-bold text-white sm:text-2xl">{cat.name.charAt(0)}</span>
+                  )}
+                </div>
+                <p className="max-w-[100px] text-sm font-semibold text-gray-900 sm:max-w-[120px]">{cat.name}</p>
+              </Link>
+            ))}
           </div>
         </section>
-      )}
+      </div>
+    )
+  }
 
-      <div className="mx-auto max-w-6xl px-4 py-10">
-        {/* Categories */}
-        {sections.show_categories !== false && categories && categories.length > 0 && (
-          <section className="mb-12">
-            <h2 className="mb-5 text-xl font-bold text-gray-900">{t('storefrontHome.shopByCategory')}</h2>
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  to={`/store/${slug}/category/${cat.slug}`}
-                  className="group flex flex-col items-center gap-3 text-center transition hover:-translate-y-1"
-                >
-                  <div
-                    className={`flex h-24 w-24 items-center justify-center overflow-hidden shadow-sm transition-shadow group-hover:shadow-md sm:h-32 sm:w-32 ${theme.designConfig?.category_shape === 'square' ? 'rounded-none' : theme.designConfig?.category_shape === 'rounded' ? 'rounded-2xl' : 'rounded-full'}`}
-                    style={{
-                      backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
-                      backgroundColor: cat.image_url ? undefined : theme.primary,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  >
-                    {!cat.image_url && (
-                      <span className="text-xl font-bold text-white sm:text-2xl">{cat.name.charAt(0)}</span>
-                    )}
-                  </div>
-                  <p className="max-w-[100px] text-sm font-semibold text-gray-900 sm:max-w-[120px]">{cat.name}</p>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Products */}
+  const renderFeatured = () => {
+    return (
+      <div key="featured" className="mx-auto max-w-6xl px-4 py-10">
         <section id="products">
           <h2 className="mb-5 text-xl font-bold text-gray-900">
             {sections.show_featured !== false && featured.length > 0 ? t('storefrontHome.featuredProducts') : t('storefrontHome.allProducts')}
@@ -191,6 +206,17 @@ export default function StorefrontHome() {
           )}
         </section>
       </div>
+    )
+  }
+
+  return (
+    <div>
+      {sectionOrder.map((sectionId) => {
+        if (sectionId === 'banner') return renderBanner()
+        if (sectionId === 'categories') return renderCategories()
+        if (sectionId === 'featured') return renderFeatured()
+        return null
+      })}
     </div>
   )
 }
@@ -244,7 +270,11 @@ export function ProductCard({
   return (
     <Link
       to={`/store/${storeSlug}/product/${product.slug}`}
-      className="group overflow-hidden rounded-xl border border-gray-100 bg-white transition hover:shadow-lg"
+      className={cn(
+        "group overflow-hidden transition hover:shadow-lg",
+        theme.designConfig?.card_style === 'flat' ? 'border border-gray-100 shadow-none' : theme.designConfig?.card_style === 'shadow' ? 'border-none shadow-md' : 'border border-gray-200 shadow-sm',
+        theme.designConfig?.card_style === 'shadow' ? 'rounded-2xl' : 'rounded-xl'
+      )}
     >
       <div className={`relative overflow-hidden bg-gray-100 ${theme.designConfig?.product_image_ratio === 'portrait' ? 'aspect-[3/4]' : theme.designConfig?.product_image_ratio === 'landscape' ? 'aspect-[4/3]' : 'aspect-square'}`}>
         {image ? (
@@ -288,7 +318,10 @@ export function ProductCard({
         <button
           onClick={addToCart}
           disabled={outOfStock}
-          className="mt-2.5 w-full rounded-lg py-2 text-xs font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
+          className={cn(
+            "mt-2.5 w-full py-2 text-xs font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40",
+            theme.designConfig?.button_style === 'square' ? 'rounded-none' : theme.designConfig?.button_style === 'pill' ? 'rounded-full' : 'rounded-lg'
+          )}
           style={{ backgroundColor: theme.primary }}
         >
           {outOfStock ? t('common.outOfStock') : t('common.addToCart')}

@@ -188,6 +188,10 @@ export interface StoreSettings {
     logo_size?: 'small' | 'medium' | 'large'
     product_image_ratio?: 'square' | 'portrait' | 'landscape'
     category_shape?: 'circle' | 'rounded' | 'square'
+    button_style?: 'pill' | 'rounded' | 'square'
+    card_style?: 'shadow' | 'border' | 'flat'
+    header_layout?: 'logo-left' | 'logo-center'
+    section_order?: string[]
   }
   created_at: string
   updated_at: string

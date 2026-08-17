@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Palette, Save, Image as ImageIcon, Layout, Settings2, Check } from 'lucide-react'
+import { Palette, Save, Image as ImageIcon, Layout, Settings2, Check, ChevronUp, ChevronDown } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { useSettingsQuery, useProductsQuery, useCategoriesQuery, storeKeys } from '@/lib/queries'
 import { updateSettings } from '@/lib/api'
@@ -405,68 +405,85 @@ export default function CustomizationPage() {
                     <CardDescription>{t('customization.homepageSectionsDesc') ?? 'Toggle sections to show on your storefront.'}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <ToggleRow
-                      label={t('customization.showBanner') ?? 'Show Welcome Banner'}
-                      checked={preview.showBanner}
-                      onChange={(v) =>
-                        setForm((f) => ({
-                          ...f,
-                          homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_banner: v },
-                        }))
+                    {(designConfig.section_order ?? ['banner', 'categories', 'featured']).map((sectionId, index, array) => {
+                      const isFirst = index === 0
+                      const isLast = index === array.length - 1
+                      const moveUp = () => {
+                        const newOrder = [...array]
+                        ;[newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]]
+                        setDesignConfig(prev => ({ ...prev, section_order: newOrder }))
                       }
-                    />
-                    {preview.showBanner && (
-                      <div className="grid grid-cols-1 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 ms-4">
-                        <div>
-                          <Label htmlFor="bannerHeading">{t('customization.bannerHeading') ?? 'Banner Heading'}</Label>
-                          <Input
-                            id="bannerHeading"
-                            value={preview.bannerHeading}
-                            onChange={(e) =>
-                              setForm((f) => ({
-                                ...f,
-                                homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), banner_heading: e.target.value },
-                              }))
-                            }
-                            placeholder={t('customization.bannerHeadingPlaceholder') ?? 'Welcome to our store!'}
+                      const moveDown = () => {
+                        const newOrder = [...array]
+                        ;[newOrder[index + 1], newOrder[index]] = [newOrder[index], newOrder[index + 1]]
+                        setDesignConfig(prev => ({ ...prev, section_order: newOrder }))
+                      }
+
+                      if (sectionId === 'banner') {
+                        return (
+                          <div key="banner" className="space-y-3">
+                            <SectionRow
+                              label={t('customization.showBanner') ?? 'Show Welcome Banner'}
+                              checked={preview.showBanner}
+                              onChange={(v) => setForm(f => ({ ...f, homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_banner: v } }))}
+                              onMoveUp={moveUp}
+                              onMoveDown={moveDown}
+                              isFirst={isFirst}
+                              isLast={isLast}
+                            />
+                            {preview.showBanner && (
+                              <div className="grid grid-cols-1 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100 ms-4">
+                                <div>
+                                  <Label htmlFor="bannerHeading">{t('customization.bannerHeading') ?? 'Banner Heading'}</Label>
+                                  <Input
+                                    id="bannerHeading"
+                                    value={preview.bannerHeading}
+                                    onChange={(e) => setForm(f => ({ ...f, homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), banner_heading: e.target.value } }))}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="bannerSub">{t('customization.bannerSubheading') ?? 'Banner Subheading'}</Label>
+                                  <Input
+                                    id="bannerSub"
+                                    value={preview.bannerSubheading}
+                                    onChange={(e) => setForm(f => ({ ...f, homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), banner_subheading: e.target.value } }))}
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      }
+                      if (sectionId === 'categories') {
+                        return (
+                          <SectionRow
+                            key="categories"
+                            label={t('customization.showCategories') ?? 'Show Categories'}
+                            checked={preview.showCategories}
+                            onChange={(v) => setForm(f => ({ ...f, homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_categories: v } }))}
+                            onMoveUp={moveUp}
+                            onMoveDown={moveDown}
+                            isFirst={isFirst}
+                            isLast={isLast}
                           />
-                        </div>
-                        <div>
-                          <Label htmlFor="bannerSub">{t('customization.bannerSubheading') ?? 'Banner Subheading'}</Label>
-                          <Input
-                            id="bannerSub"
-                            value={preview.bannerSubheading}
-                            onChange={(e) =>
-                              setForm((f) => ({
-                                ...f,
-                                homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), banner_subheading: e.target.value },
-                              }))
-                            }
-                            placeholder={t('customization.bannerSubheadingPlaceholder') ?? 'Discover our latest products'}
+                        )
+                      }
+                      if (sectionId === 'featured') {
+                        return (
+                          <SectionRow
+                            key="featured"
+                            label={t('customization.showFeatured') ?? 'Show Featured Products'}
+                            checked={preview.showFeatured}
+                            onChange={(v) => setForm(f => ({ ...f, homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_featured: v } }))}
+                            onMoveUp={moveUp}
+                            onMoveDown={moveDown}
+                            isFirst={isFirst}
+                            isLast={isLast}
                           />
-                        </div>
-                      </div>
-                    )}
-                    <ToggleRow
-                      label={t('customization.showFeatured') ?? 'Show Featured Products'}
-                      checked={preview.showFeatured}
-                      onChange={(v) =>
-                        setForm((f) => ({
-                          ...f,
-                          homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_featured: v },
-                        }))
+                        )
                       }
-                    />
-                    <ToggleRow
-                      label={t('customization.showCategories') ?? 'Show Categories'}
-                      checked={preview.showCategories}
-                      onChange={(v) =>
-                        setForm((f) => ({
-                          ...f,
-                          homepage_sections: { ...HOMEPAGE_DEFAULTS, ...(f.homepage_sections ?? {}), show_categories: v },
-                        }))
-                      }
-                    />
+                      return null
+                    })}
                   </CardContent>
                 </Card>
 
@@ -510,6 +527,41 @@ export default function CustomizationPage() {
                         <option value="circle">{t('customization.circle') ?? 'Circle'}</option>
                         <option value="rounded">{t('customization.rounded') ?? 'Rounded Square'}</option>
                         <option value="square">{t('customization.squareShape') ?? 'Sharp Square'}</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label className="mb-2 block">Button Style</Label>
+                      <select
+                        value={designConfig?.button_style ?? 'pill'}
+                        onChange={(e) => setDesignConfig(prev => ({ ...prev, button_style: e.target.value as any }))}
+                        className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                      >
+                        <option value="pill">Pill (Fully rounded)</option>
+                        <option value="rounded">Rounded</option>
+                        <option value="square">Square</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label className="mb-2 block">Card Style</Label>
+                      <select
+                        value={designConfig?.card_style ?? 'border'}
+                        onChange={(e) => setDesignConfig(prev => ({ ...prev, card_style: e.target.value as any }))}
+                        className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                      >
+                        <option value="border">Bordered</option>
+                        <option value="shadow">Shadows (No border)</option>
+                        <option value="flat">Flat (Minimal)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label className="mb-2 block">Header Layout</Label>
+                      <select
+                        value={designConfig?.header_layout ?? 'logo-left'}
+                        onChange={(e) => setDesignConfig(prev => ({ ...prev, header_layout: e.target.value as any }))}
+                        className="h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                      >
+                        <option value="logo-left">Logo on Left</option>
+                        <option value="logo-center">Logo Centered</option>
                       </select>
                     </div>
                   </CardContent>
@@ -616,30 +668,51 @@ function TabButton({ id, label, icon, activeTab, setActiveTab }: { id: TabId, la
   )
 }
 
-function ToggleRow({
+function SectionRow({
   label,
   checked,
   onChange,
+  onMoveUp,
+  onMoveDown,
+  isFirst,
+  isLast,
 }: {
   label: string
   checked: boolean
   onChange: (v: boolean) => void
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  isFirst?: boolean
+  isLast?: boolean
 }) {
   return (
-    <label className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm hover:bg-gray-50 transition-colors">
-      <span className="text-sm font-medium text-gray-800">{label}</span>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onChange(!checked)}
-        className={cn('relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2', checked ? 'bg-green-500' : 'bg-gray-200')}
-      >
-        <span className={cn('pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out', checked ? 'translate-x-5' : 'translate-x-0.5 mt-0.5')} />
-      </button>
-    </label>
+    <div className="flex items-center gap-2">
+      <label className="flex-1 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white p-4 shadow-sm hover:bg-gray-50 transition-colors">
+        <span className="text-sm font-medium text-gray-800">{label}</span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={checked}
+          onClick={() => onChange(!checked)}
+          className={cn('relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2', checked ? 'bg-green-500' : 'bg-gray-200')}
+        >
+          <span className={cn('pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out', checked ? 'translate-x-5' : 'translate-x-0.5 mt-0.5')} />
+        </button>
+      </label>
+      {onMoveUp && onMoveDown && (
+        <div className="flex flex-col gap-1 shrink-0">
+          <button type="button" onClick={onMoveUp} disabled={isFirst} className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+            <ChevronUp className="h-4 w-4" />
+          </button>
+          <button type="button" onClick={onMoveDown} disabled={isLast} className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+            <ChevronDown className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+    </div>
   )
 }
+
 
 function StorefrontPreview({
   storeName,
