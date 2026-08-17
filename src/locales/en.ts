@@ -1,6 +1,6 @@
 export const en = {
   // Brand
-  'app.name': 'StoreCraft',
+  'app.name': 'StoreHub',
 
   // Common
   'common.loading': 'Loading…',

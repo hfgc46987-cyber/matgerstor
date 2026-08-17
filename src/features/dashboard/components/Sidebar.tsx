@@ -38,9 +38,7 @@ export default function Sidebar() {
   return (
     <aside className="fixed inset-y-0 start-0 z-30 flex w-64 flex-col border-e border-gray-200 bg-white">
       <div className="flex h-16 items-center gap-2.5 border-b border-gray-100 px-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600">
-          <Store className="h-5 w-5 text-white" />
-        </div>
+          <img src="/logo.png" alt="StoreHub Logo" className="h-8 w-auto object-contain" />
         <div className="min-w-0">
           <p className="text-sm font-bold text-gray-900">{t('app.name')}</p>
           <p className="text-[11px] text-gray-400">{t('sidebar.storeManager')}</p>

@@ -76,9 +76,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600">
-              <Store className="h-5 w-5 text-white" />
-            </div>
+            <img src="/logo.png" alt="StoreHub Logo" className="h-9 w-auto object-contain" />
             <span className="text-lg font-bold text-gray-900">{t('app.name')}</span>
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium text-gray-600 md:flex">
@@ -264,7 +262,7 @@ export default function LandingPage() {
       <footer className="border-t border-gray-100 bg-white py-8">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-gray-400 sm:flex-row">
           <div className="flex items-center gap-2">
-            <Store className="h-4 w-4" />
+            <img src="/logo.png" alt="StoreHub Logo" className="h-5 w-auto object-contain grayscale" />
             <span className="font-semibold text-gray-600">{t('app.name')}</span>
           </div>
           <p>© {new Date().getFullYear()} {t('app.name')}. {t('auth.builtOn')}</p>

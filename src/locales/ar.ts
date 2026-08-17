@@ -2,7 +2,7 @@ import type { en } from './en'
 
 export const ar: typeof en = {
   // Brand
-  'app.name': 'StoreCraft',
+  'app.name': 'StoreHub',
 
   // Common
   'common.loading': 'جارٍ التحميل…',

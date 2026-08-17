@@ -17,9 +17,7 @@ export default function AuthLayout() {
         }} />
         <div className="relative">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600">
-              <Store className="h-5 w-5 text-white" />
-            </div>
+            <img src="/logo.png" alt="StoreHub Logo" className="h-10 w-auto object-contain brightness-0 invert" />
             <span className="text-xl font-bold text-white">{t('app.name')}</span>
           </Link>
         </div>
@@ -49,9 +47,7 @@ export default function AuthLayout() {
       <div className="flex w-full flex-col items-center justify-center px-6 py-12 lg:w-1/2">
         <div className="mb-8 flex w-full max-w-md items-center justify-between">
           <div className="flex items-center gap-2.5 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-600">
-              <Store className="h-5 w-5 text-white" />
-            </div>
+            <img src="/logo.png" alt="StoreHub Logo" className="h-9 w-auto object-contain" />
             <span className="text-lg font-bold text-gray-900">{t('app.name')}</span>
           </div>
           <div className="ms-auto">
