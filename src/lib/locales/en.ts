@@ -8,6 +8,7 @@ export const en = {
   'nav.inventory': 'Inventory',
   'nav.analytics': 'Analytics',
   'nav.customization': 'Store Customization',
+  'nav.marketing': 'Marketing',
   'nav.settings': 'Settings',
   'nav.admin.overview': 'Overview',
   'nav.admin.users': 'Users',
@@ -34,6 +35,7 @@ export const en = {
   'action.signUp': 'Sign up',
   'action.getStarted': 'Get started',
   'action.continue': 'Continue',
+  'action.exportCsv': 'Export CSV',
 
   // UI
   'ui.loading': 'Loading...',

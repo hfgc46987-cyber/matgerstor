@@ -115,6 +115,22 @@ function StorefrontShell() {
   return (
     <CartProvider storeSlug={store.slug}>
       <div className="min-h-screen" style={{ fontFamily: theme.font }}>
+        {/* Announcement Bar */}
+        {settings?.announcement_active && settings.announcement_text && (
+          <div 
+            className="px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm"
+            style={{ backgroundColor: theme.primary }}
+          >
+            {settings.announcement_link ? (
+              <a href={settings.announcement_link} className="hover:underline flex items-center justify-center gap-2">
+                <span>{settings.announcement_text}</span>
+              </a>
+            ) : (
+              <span>{settings.announcement_text}</span>
+            )}
+          </div>
+        )}
+
         {/* Header */}
         <header
           className="sticky top-0 z-30"

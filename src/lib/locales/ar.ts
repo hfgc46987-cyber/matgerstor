@@ -10,6 +10,7 @@ export const ar: Record<TranslationKey, string> = {
   'nav.inventory': 'المخزون',
   'nav.analytics': 'التحليلات',
   'nav.customization': 'تخصيص المتجر',
+  'nav.marketing': 'التسويق',
   'nav.settings': 'الإعدادات',
   'nav.admin.overview': 'نظرة عامة',
   'nav.admin.users': 'المستخدمين',
@@ -36,6 +37,7 @@ export const ar: Record<TranslationKey, string> = {
   'action.signUp': 'إنشاء حساب',
   'action.getStarted': 'البدء',
   'action.continue': 'متابعة',
+  'action.exportCsv': 'تصدير CSV',
 
   // UI
   'ui.loading': 'جاري التحميل...',

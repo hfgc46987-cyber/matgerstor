@@ -13,6 +13,7 @@ import {
   Subscription,
   Plan,
   OrderStatus,
+  Coupon,
 } from '@/lib/types'
 
 // ---------- Products ----------
@@ -604,4 +605,56 @@ export async function fetchCurrentSubscription(storeId: string): Promise<{ plan:
 export async function fetchPlans(): Promise<Plan[]> {
   const { data } = await supabase.from('plans').select('*').order('price', { ascending: true })
   return (data as Plan[]) ?? []
+}
+
+// ---------- Coupons ----------
+
+export async function fetchCoupons(storeId: string): Promise<Coupon[]> {
+  const { data, error } = await supabase
+    .from('coupons')
+    .select('*')
+    .eq('store_id', storeId)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data as Coupon[]) ?? []
+}
+
+export async function upsertCoupon(input: {
+  id?: string
+  storeId: string
+  code: string
+  type: 'percentage' | 'fixed'
+  value: number
+  min_order_amount?: number | null
+  max_uses?: number | null
+  valid_from?: string | null
+  valid_until?: string | null
+  is_active: boolean
+}): Promise<Coupon> {
+  const payload = {
+    id: input.id,
+    store_id: input.storeId,
+    code: input.code,
+    type: input.type,
+    value: input.value,
+    min_order_amount: input.min_order_amount ?? 0,
+    max_uses: input.max_uses ?? null,
+    valid_from: input.valid_from ?? null,
+    valid_until: input.valid_until ?? null,
+    is_active: input.is_active,
+  }
+  if (input.id) {
+    delete (payload as { id?: string }).id
+    const { data, error } = await supabase.from('coupons').update(payload).eq('id', input.id).select().single()
+    if (error) throw error
+    return data as Coupon
+  }
+  const { data, error } = await supabase.from('coupons').insert(payload).select().single()
+  if (error) throw error
+  return data as Coupon
+}
+
+export async function deleteCoupon(id: string) {
+  const { error } = await supabase.from('coupons').delete().eq('id', id)
+  if (error) throw error
 }

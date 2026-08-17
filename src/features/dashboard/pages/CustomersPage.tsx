@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Search, Users } from 'lucide-react'
+import { Search, Users, Download } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { useCustomersQuery } from '@/lib/queries'
 import { Avatar } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Table, THead, TBody, TRow, TH, TD } from '@/components/ui/table'
 import { Pagination } from '@/components/ui/pagination'
@@ -37,11 +38,43 @@ export default function CustomersPage() {
     search: debouncedSearch || undefined,
   })
 
+  const handleExportCSV = () => {
+    if (!data || data.data.length === 0) return
+    const headers = ['Name', 'Email', 'Phone', 'Total Orders', 'Total Spent', 'Currency', 'Joined']
+    const rows = data.data.map(customer => [
+      `"${customer.name}"`,
+      customer.email ?? '',
+      customer.phone ?? '',
+      customer.total_orders,
+      customer.total_spent,
+      currency,
+      new Date(customer.created_at).toISOString()
+    ])
+    
+    const csvContent = [headers.join(',')]
+      .concat(rows.map(e => e.join(',')))
+      .join('\n')
+      
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.setAttribute('download', 'customers_export.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{t('customers.title')}</h1>
-        <p className="mt-0.5 text-sm text-gray-500">{t('customers.subtitle')}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">{t('customers.title')}</h1>
+          <p className="mt-0.5 text-sm text-gray-500">{t('customers.subtitle')}</p>
+        </div>
+        <Button variant="outline" onClick={handleExportCSV} disabled={!data || data.data.length === 0} className="gap-2">
+          <Download className="w-4 h-4" />
+          {t('action.exportCsv')}
+        </Button>
       </div>
 
       <div className="w-full sm:w-72">

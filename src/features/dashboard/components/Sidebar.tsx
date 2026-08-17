@@ -12,6 +12,7 @@ import {
   Store,
   ExternalLink,
   ShieldCheck,
+  Megaphone,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/lib/store'
@@ -28,8 +29,9 @@ export default function Sidebar() {
     { to: '/dashboard/categories', label: 'nav.categories', icon: Tags },
     { to: '/dashboard/customers', label: 'nav.customers', icon: Users },
     { to: '/dashboard/inventory', label: 'nav.inventory', icon: Boxes },
+    { to: '/dashboard/marketing', label: 'nav.marketing', icon: Megaphone },
     { to: '/dashboard/analytics', label: 'nav.analytics', icon: BarChart3 },
-    { to: '/dashboard/customization', label: 'nav.storeCustomization', icon: Palette },
+    { to: '/dashboard/customization', label: 'nav.customization', icon: Palette },
     { to: '/dashboard/settings', label: 'nav.settings', icon: Settings },
   ]
 

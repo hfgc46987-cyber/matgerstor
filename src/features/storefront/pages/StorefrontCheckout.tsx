@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useI18n } from '@/lib/i18n'
 import { formatMoney } from '@/lib/utils'
-import { Store, StoreSettings, ShippingMethod } from '@/lib/types'
+import { Store, StoreSettings, ShippingMethod, Coupon } from '@/lib/types'
 
 interface OutletCtx {
   store: Store
@@ -38,6 +38,11 @@ export default function StorefrontCheckout() {
   const [notes, setNotes] = useState('')
   const [shippingMethodId, setShippingMethodId] = useState('')
   const [placing, setPlacing] = useState(false)
+  
+  const [couponCode, setCouponCode] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null)
+  const [couponError, setCouponError] = useState('')
+  const [applyingCoupon, setApplyingCoupon] = useState(false)
 
   const { data: shippingMethods } = useQuery({
     queryKey: ['storefront-shipping', store.id],
@@ -64,7 +69,69 @@ export default function StorefrontCheckout() {
     return method.price
   }, [shippingMethodId, shippingMethods, freeShippingEnabled, freeShippingMin, subtotal])
 
-  const total = subtotal + shippingCost
+  const discountAmount = useMemo(() => {
+    if (!appliedCoupon) return 0
+    if (appliedCoupon.type === 'percentage') {
+      return (subtotal * appliedCoupon.value) / 100
+    }
+    return Math.min(appliedCoupon.value, subtotal)
+  }, [appliedCoupon, subtotal])
+
+  const total = Math.max(0, subtotal - discountAmount) + shippingCost
+
+  const applyCoupon = async () => {
+    if (!couponCode) return
+    setApplyingCoupon(true)
+    setCouponError('')
+    const { data, error } = await supabase
+      .from('coupons')
+      .select('*')
+      .eq('store_id', store.id)
+      .eq('code', couponCode.toUpperCase())
+      .eq('is_active', true)
+      .maybeSingle()
+      
+    if (error || !data) {
+      setCouponError('Invalid or expired coupon')
+      setApplyingCoupon(false)
+      return
+    }
+    
+    if (data.min_order_amount && subtotal < data.min_order_amount) {
+      setCouponError(`Minimum order amount is ${formatMoney(data.min_order_amount, store.currency)}`)
+      setApplyingCoupon(false)
+      return
+    }
+    
+    if (data.max_uses && data.used_count >= data.max_uses) {
+      setCouponError('Coupon limit reached')
+      setApplyingCoupon(false)
+      return
+    }
+
+    const now = new Date()
+    if (data.valid_from && new Date(data.valid_from) > now) {
+      setCouponError('Coupon is not valid yet')
+      setApplyingCoupon(false)
+      return
+    }
+    if (data.valid_until && new Date(data.valid_until) < now) {
+      setCouponError('Coupon has expired')
+      setApplyingCoupon(false)
+      return
+    }
+
+    setAppliedCoupon(data as Coupon)
+    setCouponError('')
+    setCouponCode('')
+    setApplyingCoupon(false)
+  }
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null)
+    setCouponCode('')
+    setCouponError('')
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -94,7 +161,8 @@ export default function StorefrontCheckout() {
       p_notes: notes || null,
       p_shipping_method_name: selectedMethod?.name ?? null,
       p_shipping_cost: shippingCost,
-      p_discount: 0,
+      p_discount: discountAmount,
+      p_coupon_code: appliedCoupon?.code ?? null,
       p_items: items.map((i) => ({ product_id: i.product_id, quantity: i.quantity })),
     })
 
@@ -252,6 +320,12 @@ export default function StorefrontCheckout() {
                 <span>{t('common.subtotal')}</span>
                 <span className="font-medium text-gray-900">{formatMoney(subtotal, store.currency)}</span>
               </div>
+              {appliedCoupon && (
+                <div className="flex justify-between text-green-600">
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span className="font-medium">-{formatMoney(discountAmount, store.currency)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-gray-500">
                 <span>{t('common.shipping')}</span>
                 <span className="font-medium text-gray-900">
@@ -263,6 +337,34 @@ export default function StorefrontCheckout() {
                 <span>{formatMoney(total, store.currency)}</span>
               </div>
             </div>
+            
+            <div className="mt-4 border-t border-gray-100 pt-4">
+              {!appliedCoupon ? (
+                <div className="flex gap-2">
+                  <Input 
+                    value={couponCode} 
+                    onChange={e => setCouponCode(e.target.value)} 
+                    placeholder="Discount code" 
+                    className="h-10"
+                  />
+                  <button 
+                    type="button" 
+                    onClick={applyCoupon}
+                    disabled={applyingCoupon || !couponCode}
+                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md text-sm font-medium transition disabled:opacity-50"
+                  >
+                    Apply
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between bg-green-50 p-2 rounded border border-green-100">
+                  <span className="text-sm font-medium text-green-700">{appliedCoupon.code} applied</span>
+                  <button type="button" onClick={removeCoupon} className="text-xs text-green-700 hover:text-green-900 font-medium">Remove</button>
+                </div>
+              )}
+              {couponError && <p className="text-xs text-red-500 mt-1">{couponError}</p>}
+            </div>
+
             <button
               type="submit"
               disabled={placing}

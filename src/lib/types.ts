@@ -177,6 +177,9 @@ export interface StoreSettings {
   }
   free_shipping: boolean
   free_shipping_min: number | null
+  announcement_text: string | null
+  announcement_link: string | null
+  announcement_active: boolean
   created_at: string
   updated_at: string
 }
@@ -237,4 +240,20 @@ export interface StorefrontProduct extends Product {
   category_name: string | null
   primary_image?: string | null
   images?: ProductImage[]
+}
+
+export interface Coupon {
+  id: string
+  store_id: string
+  code: string
+  type: 'percentage' | 'fixed'
+  value: number
+  min_order_amount: number | null
+  max_uses: number | null
+  used_count: number
+  valid_from: string | null
+  valid_until: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
 }

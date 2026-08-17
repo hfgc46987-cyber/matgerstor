@@ -23,6 +23,7 @@ const CategoriesPage = lazy(() => import('@/features/dashboard/pages/CategoriesP
 const CustomersPage = lazy(() => import('@/features/dashboard/pages/CustomersPage'))
 const InventoryPage = lazy(() => import('@/features/dashboard/pages/InventoryPage'))
 const AnalyticsPage = lazy(() => import('@/features/dashboard/pages/AnalyticsPage'))
+const MarketingPage = lazy(() => import('@/features/dashboard/pages/MarketingPage'))
 const CustomizationPage = lazy(() => import('@/features/dashboard/pages/CustomizationPage'))
 const SettingsPage = lazy(() => import('@/features/dashboard/pages/SettingsPage'))
 const AdminLayout = lazy(() => import('@/features/admin/AdminLayout'))
@@ -136,6 +137,7 @@ function AppRoutes() {
           <Route path="customers" element={<CustomersPage />} />
           <Route path="inventory" element={<InventoryPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="marketing" element={<MarketingPage />} />
           <Route path="customization" element={<CustomizationPage />} />
           <Route path="settings" element={<SettingsPage />} />
         </Route>

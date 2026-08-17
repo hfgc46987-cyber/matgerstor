@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, ShoppingCart } from 'lucide-react'
+import { Search, ShoppingCart, Download } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { useOrdersQuery } from '@/lib/queries'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { Badge, orderStatusVariant, paymentStatusVariant } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Table, THead, TBody, TRow, TH, TD } from '@/components/ui/table'
@@ -43,11 +44,44 @@ export default function OrdersPage() {
     search: debouncedSearch || undefined,
   })
 
+  const handleExportCSV = () => {
+    if (!data || data.data.length === 0) return
+    const headers = ['Order Number', 'Customer', 'Email', 'Date', 'Status', 'Payment Status', 'Total', 'Currency']
+    const rows = data.data.map(order => [
+      order.order_number,
+      `"${order.customer?.name ?? t('common.guest')}"`,
+      order.customer?.email ?? '',
+      new Date(order.created_at).toISOString(),
+      order.status,
+      order.payment_status,
+      order.total,
+      order.currency
+    ])
+    
+    const csvContent = [headers.join(',')]
+      .concat(rows.map(e => e.join(',')))
+      .join('\n')
+      
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.setAttribute('download', 'orders_export.csv')
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div className="mx-auto max-w-7xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">{t('orders.title')}</h1>
-        <p className="mt-0.5 text-sm text-gray-500">{t('orders.subtitle')}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900">{t('orders.title')}</h1>
+          <p className="mt-0.5 text-sm text-gray-500">{t('orders.subtitle')}</p>
+        </div>
+        <Button variant="outline" onClick={handleExportCSV} disabled={!data || data.data.length === 0} className="gap-2">
+          <Download className="w-4 h-4" />
+          {t('action.exportCsv')}
+        </Button>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
