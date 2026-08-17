@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ImageUpload } from '@/components/ui/image-upload'
 import { Spinner } from '@/components/ui/spinner'
 import { useToast } from '@/components/ui/toast'
+import { AiDesignAssistant } from '../components/AiDesignAssistant'
 import { useI18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { StoreSettings } from '@/lib/types'
@@ -648,6 +649,13 @@ export default function CustomizationPage() {
           </div>
         </div>
       </div>
+      <AiDesignAssistant 
+        currentForm={{ ...form, design_config: designConfig }} 
+        onUpdateForm={(newForm) => { 
+          setForm(newForm); 
+          if(newForm.design_config) setDesignConfig(newForm.design_config); 
+        }} 
+      />
     </div>
   )
 }

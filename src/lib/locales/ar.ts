@@ -22,6 +22,13 @@ export const ar: Record<TranslationKey, string> = {
   'nav.platformAdmin': 'مدير المنصة',
   'nav.viewStorefront': 'عرض المتجر',
   'nav.backToDashboard': 'العودة للوحة التحكم',
+  'aiAssistant.title': 'مساعد التصميم الذكي',
+  'aiAssistant.button': 'المساعد الذكي',
+  'aiAssistant.description': 'صف كيف تريد أن يبدو متجرك، وسأقوم بضبط الإعدادات فوراً!',
+  'aiAssistant.placeholder': 'مثال: اجعله متجر ساعات فخم بألوان داكنة...',
+  'aiAssistant.designing': 'جاري التصميم...',
+  'aiAssistant.designIt': 'صمم الآن!',
+  'aiAssistant.error': 'فشل في توليد التصميم. يرجى المحاولة مرة أخرى.',
   
   // Actions
   'action.save': 'حفظ',

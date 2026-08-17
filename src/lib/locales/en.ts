@@ -20,6 +20,13 @@ export const en = {
   'nav.backToDashboard': 'Back to dashboard',
   'nav.advancedDesign': 'Advanced Design',
   'nav.logoSize': 'Logo Size',
+  'aiAssistant.title': 'AI Design Assistant',
+  'aiAssistant.button': 'AI Assistant',
+  'aiAssistant.description': 'Describe how you want your store to look, and I\'ll configure it instantly!',
+  'aiAssistant.placeholder': 'e.g. Make it a luxury watch store with a dark theme...',
+  'aiAssistant.designing': 'Designing...',
+  'aiAssistant.designIt': 'Design It!',
+  'aiAssistant.error': 'Failed to generate design. Please try again.',
   
   // Actions
   'action.save': 'Save',
