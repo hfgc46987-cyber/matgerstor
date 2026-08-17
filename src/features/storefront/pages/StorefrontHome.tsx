@@ -1,0 +1,293 @@
+import { Link, useOutletContext, useParams } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import { ShoppingBag, ArrowRight } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { useCart, type CartItem } from '../cart-context'
+import { useToast } from '@/components/ui/toast'
+import { useI18n } from '@/lib/i18n'
+import { formatMoney } from '@/lib/utils'
+import { Store, StoreSettings } from '@/lib/types'
+
+interface OutletCtx {
+  store: Store
+  settings: StoreSettings | null
+  theme: { primary: string; secondary: string; font: string; bannerUrl: string | null }
+}
+
+export default function StorefrontHome() {
+  const { store, settings, theme } = useOutletContext<OutletCtx>()
+  const { slug } = useParams<{ slug: string }>()
+  const { t } = useI18n()
+
+  const sections = settings?.homepage_sections ?? {
+    show_banner: true,
+    show_featured: true,
+    show_categories: true,
+    banner_heading: '',
+    banner_subheading: '',
+  }
+
+  const { data: products, isLoading } = useQuery({
+    queryKey: ['storefront-products', slug],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('products')
+        .select('*')
+        .eq('store_id', store.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+        .limit(12)
+      return (data as StoreProduct[]) ?? []
+    },
+    enabled: Boolean(store.id),
+  })
+
+  const { data: productImages } = useQuery({
+    queryKey: ['storefront-images', slug, products?.map((p) => p.id).join(',')],
+    queryFn: async () => {
+      const ids = (products ?? []).map((p) => p.id)
+      if (ids.length === 0) return {} as Record<string, string>
+      const { data } = await supabase
+        .from('product_images')
+        .select('product_id, url')
+        .in('product_id', ids)
+        .order('position', { ascending: true })
+      const map: Record<string, string> = {}
+      for (const row of data ?? []) {
+        if (!map[row.product_id]) map[row.product_id] = row.url
+      }
+      return map
+    },
+    enabled: Boolean(products && products.length > 0),
+  })
+
+  const { data: categories } = useQuery({
+    queryKey: ['storefront-categories', slug],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('store_id', store.id)
+        .order('created_at', { ascending: true })
+        .limit(8)
+      return data ?? []
+    },
+    enabled: Boolean(store.id),
+  })
+
+  const featured = (products ?? []).filter((p) => p.featured)
+  const grid = featured.length > 0 ? featured : (products ?? [])
+
+  return (
+    <div>
+      {/* Banner */}
+      {sections.show_banner !== false && (
+        <section
+          className="relative flex items-center justify-center px-6 py-20 text-center"
+          style={{
+            backgroundColor: theme.primary,
+            backgroundImage: theme.bannerUrl ? `url(${theme.bannerUrl})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="relative max-w-2xl">
+            <h1 className="text-3xl font-bold text-white sm:text-4xl">
+              {sections.banner_heading || t('storefrontHome.welcomeTo', { store: store.name })}
+            </h1>
+            {sections.banner_subheading && (
+              <p className="mt-3 text-base text-white/85">
+                {sections.banner_subheading}
+              </p>
+            )}
+            {store.description && !sections.banner_subheading && (
+              <p className="mt-3 text-base text-white/85">{store.description}</p>
+            )}
+            {grid.length > 0 && (
+              <a
+                href="#products"
+                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold transition hover:opacity-90"
+                style={{ color: theme.primary }}
+              >
+                {t('storefrontHome.shopNow')}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {/* Categories */}
+        {sections.show_categories !== false && categories && categories.length > 0 && (
+          <section className="mb-12">
+            <h2 className="mb-5 text-xl font-bold text-gray-900">{t('storefrontHome.shopByCategory')}</h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/store/${slug}/category/${cat.slug}`}
+                  className="group relative flex h-32 items-end overflow-hidden rounded-xl p-4 text-white transition hover:shadow-lg"
+                  style={{
+                    backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
+                    backgroundColor: theme.primary,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="relative">
+                    <p className="font-bold">{cat.name}</p>
+                    <p className="text-xs text-white/80 opacity-0 transition group-hover:opacity-100">
+                      {t('storefrontHome.browseProducts')}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Products */}
+        <section id="products">
+          <h2 className="mb-5 text-xl font-bold text-gray-900">
+            {sections.show_featured !== false && featured.length > 0 ? t('storefrontHome.featuredProducts') : t('storefrontHome.allProducts')}
+          </h2>
+          {isLoading ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="animate-pulse rounded-xl border border-gray-100 bg-gray-50 p-3">
+                  <div className="aspect-square rounded-lg bg-gray-200" />
+                  <div className="mt-3 h-3 w-3/4 rounded bg-gray-200" />
+                  <div className="mt-2 h-3 w-1/4 rounded bg-gray-200" />
+                </div>
+              ))}
+            </div>
+          ) : (products ?? []).length === 0 ? (
+            <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 py-16 text-center">
+              <ShoppingBag className="mx-auto h-10 w-10 text-gray-300" />
+              <p className="mt-3 text-sm font-medium text-gray-500">{t('storefrontHome.noProductsAvailable')}</p>
+              <p className="mt-1 text-xs text-gray-400">{t('storefrontHome.checkBackSoon')}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {grid.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  image={productImages?.[product.id]}
+                  currency={store.currency}
+                  storeSlug={slug ?? ''}
+                  theme={theme}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </div>
+  )
+}
+
+interface StoreProduct {
+  id: string
+  name: string
+  slug: string
+  price: number
+  compare_price: number | null
+  featured: boolean
+  stock_quantity: number
+  track_inventory: boolean
+  description: string | null
+}
+
+export function ProductCard({
+  product,
+  image,
+  currency,
+  storeSlug,
+  theme,
+}: {
+  product: StoreProduct
+  image?: string | null
+  currency: string
+  storeSlug: string
+  theme: { primary: string }
+}) {
+  const { addItem } = useCart()
+  const { success } = useToast()
+  const { t } = useI18n()
+  const outOfStock = product.track_inventory && product.stock_quantity <= 0
+
+  const addToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (outOfStock) return
+    addItem({
+      product_id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: image ?? null,
+      slug: product.slug,
+      max_stock: product.track_inventory ? product.stock_quantity : undefined,
+    } as CartItem)
+    success(t('storefrontHome.addedToCart'), product.name)
+  }
+
+  return (
+    <Link
+      to={`/store/${storeSlug}/product/${product.slug}`}
+      className="group overflow-hidden rounded-xl border border-gray-100 bg-white transition hover:shadow-lg"
+    >
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
+        {image ? (
+          <img
+            src={image}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-gray-300">
+            <ShoppingBag className="h-10 w-10" />
+          </div>
+        )}
+        {product.compare_price && product.compare_price > product.price && (
+          <span
+            className="absolute start-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold text-white"
+            style={{ backgroundColor: theme.primary }}
+          >
+            {t('storefrontHome.savePercent', { percent: Math.round((1 - product.price / product.compare_price) * 100) })}
+          </span>
+        )}
+        {outOfStock && (
+          <span className="absolute inset-0 flex items-center justify-center bg-white/70 text-xs font-bold text-gray-500">
+            {t('common.outOfStock')}
+          </span>
+        )}
+      </div>
+      <div className="p-3">
+        <p className="truncate text-sm font-medium text-gray-900">{product.name}</p>
+        <div className="mt-1 flex items-baseline gap-2">
+          <span className="text-sm font-bold" style={{ color: theme.primary }}>
+            {formatMoney(product.price, currency)}
+          </span>
+          {product.compare_price && product.compare_price > product.price && (
+            <span className="text-xs text-gray-400 line-through">
+              {formatMoney(product.compare_price, currency)}
+            </span>
+          )}
+        </div>
+        <button
+          onClick={addToCart}
+          disabled={outOfStock}
+          className="mt-2.5 w-full rounded-lg py-2 text-xs font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
+          style={{ backgroundColor: theme.primary }}
+        >
+          {outOfStock ? t('common.outOfStock') : t('common.addToCart')}
+        </button>
+      </div>
+    </Link>
+  )
+}
