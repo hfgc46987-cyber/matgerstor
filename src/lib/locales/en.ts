@@ -8,7 +8,7 @@ export const en = {
   'nav.inventory': 'Inventory',
   'nav.analytics': 'Analytics',
   'nav.customization': 'Store Customization',
-  'nav.marketing': 'Marketing',
+  'nav.marketing': 'Marketing & Discounts',
   'nav.settings': 'Settings',
   'nav.admin.overview': 'Overview',
   'nav.admin.users': 'Users',
