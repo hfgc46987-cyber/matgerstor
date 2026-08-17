@@ -68,6 +68,9 @@ function StorefrontShell() {
     secondary: settings?.secondary_color ?? '#111827',
     font: settings?.font ?? 'Inter',
     bannerUrl: settings?.banner_url ?? null,
+    customCss: settings?.custom_css ?? '',
+    customHead: settings?.custom_head_html ?? '',
+    layoutStyle: settings?.layout_style ?? 'default',
   }
 
   if (isLoading) {
@@ -114,7 +117,9 @@ function StorefrontShell() {
 
   return (
     <CartProvider storeSlug={store.slug}>
-      <div className="min-h-screen" style={{ fontFamily: theme.font }}>
+      {theme.customCss && <style dangerouslySetInnerHTML={{ __html: theme.customCss }} />}
+      {theme.customHead && <div dangerouslySetInnerHTML={{ __html: theme.customHead }} />}
+      <div className={`min-h-screen ${theme.layoutStyle === 'minimal' ? 'bg-white' : 'bg-gray-50'}`} style={{ fontFamily: theme.font }}>
         {/* Announcement Bar */}
         {settings?.announcement_active && settings.announcement_text && (
           <div 

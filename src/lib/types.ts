@@ -176,6 +176,10 @@ export interface StoreSettings {
     banner_subheading: string
   }
   free_shipping: boolean
+  custom_css?: string | null
+  custom_head_html?: string | null
+  custom_body_html?: string | null
+  layout_style?: string | null
   free_shipping_min: number | null
   announcement_text: string | null
   announcement_link: string | null

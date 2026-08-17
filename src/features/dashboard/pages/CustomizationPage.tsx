@@ -41,6 +41,10 @@ export default function CustomizationPage() {
   const [faviconUrl, setFaviconUrl] = useState<string | null>(null)
   const [faviconFile, setFaviconFile] = useState<File | null>(null)
   const [social, setSocial] = useState<Record<string, string>>({})
+  const [customCss, setCustomCss] = useState<string>('')
+  const [customHead, setCustomHead] = useState<string>('')
+  const [customBody, setCustomBody] = useState<string>('')
+  const [layoutStyle, setLayoutStyle] = useState<string>('default')
   const [saving, setSaving] = useState(false)
 
   const { data: settingsData, isLoading } = useSettingsQuery(storeId)
@@ -57,6 +61,10 @@ export default function CustomizationPage() {
       homepage_sections: settingsData.homepage_sections,
     })
     setSocial(settingsData.social_links ?? {})
+    setCustomCss(settingsData.custom_css ?? '')
+    setCustomHead(settingsData.custom_head_html ?? '')
+    setCustomBody(settingsData.custom_body_html ?? '')
+    setLayoutStyle(settingsData.layout_style ?? 'default')
     setLogoUrl(currentStore?.logo_url ?? null)
     setBannerUrl(settingsData.banner_url ?? null)
     setFaviconUrl(settingsData.favicon_url ?? null)
@@ -116,6 +124,10 @@ export default function CustomizationPage() {
         banner_url: banner,
         favicon_url: favicon,
         social_links: social,
+        custom_css: customCss,
+        custom_head_html: customHead,
+        custom_body_html: customBody,
+        layout_style: layoutStyle,
       }
       await updateSettings(storeId, patch)
 
@@ -323,6 +335,51 @@ export default function CustomizationPage() {
                   }))
                 }
               />
+            </CardContent>
+          </Card>
+
+          {/* Advanced Settings */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-primary-600" /> {t('customization.advanced') || 'Advanced Settings'}
+              </CardTitle>
+              <CardDescription>{t('customization.advancedDesc') || 'Inject custom CSS and HTML scripts for complete control.'}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="layoutStyle">{t('customization.layoutStyle') || 'Layout Style'}</Label>
+                <select
+                  id="layoutStyle"
+                  value={layoutStyle}
+                  onChange={(e) => setLayoutStyle(e.target.value)}
+                  className="mt-1 h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                >
+                  <option value="default">Default</option>
+                  <option value="minimal">Minimal (Clean, less borders)</option>
+                  <option value="bold">Bold (Darker headers, sharp corners)</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="customCss">Custom CSS</Label>
+                <textarea
+                  id="customCss"
+                  value={customCss}
+                  onChange={(e) => setCustomCss(e.target.value)}
+                  className="mt-1 h-32 w-full font-mono text-xs rounded-lg border border-gray-300 bg-gray-900 text-green-400 p-3 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                  placeholder="body { background-color: #f0f0f0; }"
+                />
+              </div>
+              <div>
+                <Label htmlFor="customHead">Custom Head HTML (Scripts, Pixels)</Label>
+                <textarea
+                  id="customHead"
+                  value={customHead}
+                  onChange={(e) => setCustomHead(e.target.value)}
+                  className="mt-1 h-24 w-full font-mono text-xs rounded-lg border border-gray-300 bg-gray-900 text-blue-400 p-3 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                  placeholder="<script src='https://analytics.example.com/js'></script>"
+                />
+              </div>
             </CardContent>
           </Card>
 
