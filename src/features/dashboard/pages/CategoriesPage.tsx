@@ -19,6 +19,10 @@ import { Dropdown, DropdownItem } from '@/components/ui/dropdown'
 import { useToast } from '@/components/ui/toast'
 import { slugify, cn } from '@/lib/utils'
 import { Category } from '@/lib/types'
+import { supabase } from '@/lib/supabase'
+import { ImageUpload } from '@/components/ui/image-upload'
+
+const PUBLIC_STORAGE_BASE = import.meta.env.VITE_SUPABASE_URL + '/storage/v1/object/public'
 
 export default function CategoriesPage() {
   const { currentStore } = useStore()
@@ -40,6 +44,8 @@ export default function CategoriesPage() {
   const [slugTouched, setSlugTouched] = useState(false)
   const [description, setDescription] = useState('')
   const [parentId, setParentId] = useState('')
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const openCreate = () => {
     setEditing(null)
@@ -48,6 +54,8 @@ export default function CategoriesPage() {
     setSlugTouched(false)
     setDescription('')
     setParentId('')
+    setImageUrl(null)
+    setImageFile(null)
     setModalOpen(true)
   }
 
@@ -58,6 +66,8 @@ export default function CategoriesPage() {
     setSlugTouched(true)
     setDescription(cat.description ?? '')
     setParentId(cat.parent_id ?? '')
+    setImageUrl(cat.image_url ?? null)
+    setImageFile(null)
     setModalOpen(true)
   }
 
@@ -68,6 +78,15 @@ export default function CategoriesPage() {
     }
     setSaving(true)
     try {
+      let finalImageUrl = imageUrl
+      if (imageFile) {
+        const ext = imageFile.name.split('.').pop()
+        const path = `stores/${storeId}/categories/${crypto.randomUUID()}.${ext}`
+        const { error: upErr } = await supabase.storage.from('store-assets').upload(path, imageFile, { upsert: true })
+        if (upErr) throw upErr
+        finalImageUrl = `${PUBLIC_STORAGE_BASE}/store-assets/${path}`
+      }
+
       await upsertCategory({
         id: editing?.id,
         storeId,
@@ -75,6 +94,7 @@ export default function CategoriesPage() {
         slug: slug || slugify(name),
         description: description || undefined,
         parent_id: parentId || null,
+        image_url: finalImageUrl,
       })
       success(editing ? t('categories.categoryUpdated') : t('categories.categoryCreated'))
       queryClient.invalidateQueries({ queryKey: storeKeys.categories(storeId) })
@@ -223,6 +243,18 @@ export default function CategoriesPage() {
               placeholder={t('categories.optionalDescription')}
             />
           </div>
+          <ImageUpload
+            label={t('common.image') || 'Category Image'}
+            value={imageUrl}
+            onChange={(url, file) => {
+              setImageUrl(url)
+              setImageFile(file ?? null)
+            }}
+            onClear={() => {
+              setImageUrl(null)
+              setImageFile(null)
+            }}
+          />
         </div>
       </Modal>
 
