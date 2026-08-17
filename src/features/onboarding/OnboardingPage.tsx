@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Store, Globe, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Globe, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useToast } from '@/components/ui/toast'
 import { useI18n } from '@/lib/i18n'

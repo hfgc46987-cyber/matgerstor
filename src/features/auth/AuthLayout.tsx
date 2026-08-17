@@ -1,6 +1,6 @@
 import { Link, Outlet, Navigate } from 'react-router-dom'
 import { useAuth } from '@/lib/auth'
-import { Store } from 'lucide-react'
+
 import { useI18n } from '@/lib/i18n'
 import { LangSwitcher } from '@/components/ui/lang-switcher'
 
