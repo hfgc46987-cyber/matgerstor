@@ -38,7 +38,7 @@ const SELECTED_STORE_KEY = 'storehub:selected-store'
 export function StoreProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const [stores, setStores] = useState<UserStore[]>([])
-  const [storesLoading, setStoresLoading] = useState(false)
+  const [storesLoading, setStoresLoading] = useState(true)
   const [currentStoreId, setCurrentStoreIdState] = useState<string | null>(null)
   const [settings, setSettings] = useState<StoreSettings | null>(null)
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -53,6 +53,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const loadStores = useCallback(async () => {
     if (!user) {
       setStores([])
+      setStoresLoading(false)
       return
     }
     setStoresLoading(true)
