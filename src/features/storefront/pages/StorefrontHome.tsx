@@ -11,7 +11,7 @@ import { Store, StoreSettings } from '@/lib/types'
 interface OutletCtx {
   store: Store
   settings: StoreSettings | null
-  theme: { primary: string; secondary: string; font: string; bannerUrl: string | null }
+  theme: { primary: string; secondary: string; font: string; bannerUrl: string | null; designConfig?: StoreSettings['design_config'] }
 }
 
 export default function StorefrontHome() {
@@ -133,7 +133,7 @@ export default function StorefrontHome() {
                   className="group flex flex-col items-center gap-3 text-center transition hover:-translate-y-1"
                 >
                   <div
-                    className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full shadow-sm transition-shadow group-hover:shadow-md sm:h-32 sm:w-32"
+                    className={`flex h-24 w-24 items-center justify-center overflow-hidden shadow-sm transition-shadow group-hover:shadow-md sm:h-32 sm:w-32 ${theme.designConfig?.category_shape === 'square' ? 'rounded-none' : theme.designConfig?.category_shape === 'rounded' ? 'rounded-2xl' : 'rounded-full'}`}
                     style={{
                       backgroundImage: cat.image_url ? `url(${cat.image_url})` : undefined,
                       backgroundColor: cat.image_url ? undefined : theme.primary,
@@ -218,7 +218,7 @@ export function ProductCard({
   image?: string | null
   currency: string
   storeSlug: string
-  theme: { primary: string }
+  theme: { primary: string; designConfig?: StoreSettings['design_config'] }
 }) {
   const { addItem } = useCart()
   const { success } = useToast()
@@ -246,7 +246,7 @@ export function ProductCard({
       to={`/store/${storeSlug}/product/${product.slug}`}
       className="group overflow-hidden rounded-xl border border-gray-100 bg-white transition hover:shadow-lg"
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <div className={`relative overflow-hidden bg-gray-100 ${theme.designConfig?.product_image_ratio === 'portrait' ? 'aspect-[3/4]' : theme.designConfig?.product_image_ratio === 'landscape' ? 'aspect-[4/3]' : 'aspect-square'}`}>
         {image ? (
           <img
             src={image}

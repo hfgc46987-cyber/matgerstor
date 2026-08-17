@@ -71,6 +71,7 @@ function StorefrontShell() {
     customCss: settings?.custom_css ?? '',
     customHead: settings?.custom_head_html ?? '',
     layoutStyle: settings?.layout_style ?? 'default',
+    designConfig: settings?.design_config ?? {},
   }
 
   if (isLoading) {
@@ -144,10 +145,14 @@ function StorefrontShell() {
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
             <Link to={`/store/${store.slug}`} className="flex min-w-0 items-center gap-2.5">
               {store.logo_url ? (
-                <img src={store.logo_url} alt={store.name} className="h-9 w-9 rounded-lg object-cover" />
+                <img 
+                  src={store.logo_url} 
+                  alt={store.name} 
+                  className={`rounded-lg object-cover ${theme.designConfig.logo_size === 'small' ? 'h-8 w-8' : theme.designConfig.logo_size === 'large' ? 'h-14 w-auto' : 'h-10 w-auto max-w-[120px]'}`}
+                />
               ) : (
                 <div
-                  className="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold"
+                  className={`flex items-center justify-center rounded-lg text-sm font-bold ${theme.designConfig.logo_size === 'small' ? 'h-8 w-8' : theme.designConfig.logo_size === 'large' ? 'h-14 w-14 text-xl' : 'h-10 w-10'}`}
                   style={{ backgroundColor: theme.primary }}
                 >
                   {store.name.charAt(0)}

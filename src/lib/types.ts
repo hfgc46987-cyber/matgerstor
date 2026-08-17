@@ -184,6 +184,11 @@ export interface StoreSettings {
   announcement_text: string | null
   announcement_link: string | null
   announcement_active: boolean
+  design_config: {
+    logo_size?: 'small' | 'medium' | 'large'
+    product_image_ratio?: 'square' | 'portrait' | 'landscape'
+    category_shape?: 'circle' | 'rounded' | 'square'
+  }
   created_at: string
   updated_at: string
 }

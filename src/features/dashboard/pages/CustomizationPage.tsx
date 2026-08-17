@@ -45,6 +45,7 @@ export default function CustomizationPage() {
   const [customHead, setCustomHead] = useState<string>('')
   const [customBody, setCustomBody] = useState<string>('')
   const [layoutStyle, setLayoutStyle] = useState<string>('default')
+  const [designConfig, setDesignConfig] = useState<StoreSettings['design_config']>({})
   const [saving, setSaving] = useState(false)
 
   const { data: settingsData, isLoading } = useSettingsQuery(storeId)
@@ -65,6 +66,7 @@ export default function CustomizationPage() {
     setCustomHead(settingsData.custom_head_html ?? '')
     setCustomBody(settingsData.custom_body_html ?? '')
     setLayoutStyle(settingsData.layout_style ?? 'default')
+    setDesignConfig(settingsData.design_config ?? {})
     setLogoUrl(currentStore?.logo_url ?? null)
     setBannerUrl(settingsData.banner_url ?? null)
     setFaviconUrl(settingsData.favicon_url ?? null)
@@ -128,6 +130,7 @@ export default function CustomizationPage() {
         custom_head_html: customHead,
         custom_body_html: customBody,
         layout_style: layoutStyle,
+        design_config: designConfig,
       }
       await updateSettings(storeId, patch)
 
@@ -262,6 +265,51 @@ export default function CustomizationPage() {
                       {f}
                     </option>
                   ))}
+                </select>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Advanced Design */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('customization.advancedDesign')}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div>
+                <Label>{t('customization.logoSize')}</Label>
+                <select
+                  value={designConfig?.logo_size ?? 'medium'}
+                  onChange={(e) => setDesignConfig(prev => ({ ...prev, logo_size: e.target.value as any }))}
+                  className="mt-1 h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                >
+                  <option value="small">{t('common.small')}</option>
+                  <option value="medium">{t('common.medium')}</option>
+                  <option value="large">{t('common.large')}</option>
+                </select>
+              </div>
+              <div>
+                <Label>{t('customization.productImageRatio')}</Label>
+                <select
+                  value={designConfig?.product_image_ratio ?? 'square'}
+                  onChange={(e) => setDesignConfig(prev => ({ ...prev, product_image_ratio: e.target.value as any }))}
+                  className="mt-1 h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                >
+                  <option value="square">{t('customization.square')}</option>
+                  <option value="portrait">{t('customization.portrait')}</option>
+                  <option value="landscape">{t('customization.landscape')}</option>
+                </select>
+              </div>
+              <div>
+                <Label>{t('customization.categoryShape')}</Label>
+                <select
+                  value={designConfig?.category_shape ?? 'circle'}
+                  onChange={(e) => setDesignConfig(prev => ({ ...prev, category_shape: e.target.value as any }))}
+                  className="mt-1 h-10 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+                >
+                  <option value="circle">{t('customization.circle')}</option>
+                  <option value="rounded">{t('customization.rounded')}</option>
+                  <option value="square">{t('customization.squareShape')}</option>
                 </select>
               </div>
             </CardContent>

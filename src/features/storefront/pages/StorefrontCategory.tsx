@@ -9,7 +9,7 @@ import { ProductCard } from './StorefrontHome'
 interface OutletCtx {
   store: Store
   settings: StoreSettings | null
-  theme: { primary: string; secondary: string; font: string; bannerUrl: string | null }
+  theme: { primary: string; secondary: string; font: string; bannerUrl: string | null; designConfig?: StoreSettings['design_config'] }
 }
 
 export default function StorefrontCategory() {

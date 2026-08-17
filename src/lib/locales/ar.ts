@@ -17,6 +17,8 @@ export const ar: Record<TranslationKey, string> = {
   'nav.admin.stores': 'المتاجر',
   'nav.admin.plans': 'الخطط',
   'nav.storeManager': 'مدير المتجر',
+  'nav.advancedDesign': 'تصميم متقدم',
+  'nav.logoSize': 'حجم الشعار (اللوجو)',
   'nav.platformAdmin': 'مدير المنصة',
   'nav.viewStorefront': 'عرض المتجر',
   'nav.backToDashboard': 'العودة للوحة التحكم',

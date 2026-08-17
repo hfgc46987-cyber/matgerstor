@@ -18,6 +18,8 @@ export const en = {
   'nav.platformAdmin': 'Platform Admin',
   'nav.viewStorefront': 'View storefront',
   'nav.backToDashboard': 'Back to dashboard',
+  'nav.advancedDesign': 'Advanced Design',
+  'nav.logoSize': 'Logo Size',
   
   // Actions
   'action.save': 'Save',
